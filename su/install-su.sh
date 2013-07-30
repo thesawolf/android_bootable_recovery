@@ -7,8 +7,9 @@ ln -sf /system/xbin/su /system/bin/su
 # let's try to install it using install-recovery.sh
 BUILD_RELEASE_VERSION=$(cat /system/build.prop | grep ro\\.build\\.version\\.release)
 IS_43=$(echo $BUILD_RELEASE_VERSION | grep 4\\.3)
-if [ -z "$IS_43" -o "$IS_43" \> "4.3"  -o "$IS_43" == "4.3" ]
+if [ ! -z "$IS_43" ]
 then
+  if [ -o "$IS_43" \> "4.3"  -o "$IS_43" == "4.3" ]
     # check for rom su daemon before clobbering install-recovery.sh
     if [ ! -f "/system/etc/.has_su_daemon" ]
     then
@@ -19,4 +20,5 @@ then
 	# the install-recovery.sh execute bit.
 	touch /system/etc/.installed_su_daemon
     fi
+  fi
 fi
