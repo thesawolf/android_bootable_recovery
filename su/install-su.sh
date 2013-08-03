@@ -13,6 +13,7 @@ then
     # check for rom su daemon before clobbering install-recovery.sh
     if [ ! -f "/system/etc/.has_su_daemon" ]
     then
+	chattr -i /system/etc/install-recovery.sh
 	cp /sbin/run-su-daemon.sh /system/etc/install-recovery.sh
 	chmod 755 /system/etc/install-recovery.sh
 	# note that a post install su daemon was installed
