@@ -10,6 +10,7 @@ IS_43=$(echo $BUILD_RELEASE_VERSION | grep 4\\.3)
 if [ ! -z "$IS_43" ]
 then
   if [ -o "$IS_43" \> "4.3"  -o "$IS_43" == "4.3" ]
+  then
     # check for rom su daemon before clobbering install-recovery.sh
     if [ ! -f "/system/etc/.has_su_daemon" ]
     then
