@@ -234,8 +234,9 @@ static void draw_text_line(int row, const char* t) {
 }
 
 //#define MENU_TEXT_COLOR 255, 160, 49, 255
-#define MENU_TEXT_COLOR 0, 191, 255, 255 //cyan
-#define MENU_HIGHLIGHT_COLOR 0, 0, 255, 150 //blue
+//SAW - original #define MENU_TEXT_COLOR 0, 191, 255, 255
+#define MENU_TEXT_COLOR 0, 191, 255, 255 //cyan - SAW
+#define MENU_HIGHLIGHT_COLOR 0, 0, 255, 150 //blue - SAW
 #define NORMAL_TEXT_COLOR 200, 200, 200, 255
 #define HEADER_TEXT_COLOR NORMAL_TEXT_COLOR
 
@@ -258,7 +259,7 @@ static void draw_screen_locked(void)
         int row = 0;            // current row that we are drawing on
         if (show_menu) {
 #ifndef BOARD_TOUCH_RECOVERY
-            // gr_color(MENU_TEXT_COLOR);
+            // SAW gr_color(MENU_TEXT_COLOR);
 	    gr_color(MENU_HIGHLIGHT_COLOR);
             gr_fill(0, (menu_top + menu_sel - menu_show_start) * CHAR_HEIGHT,
                     gr_fb_width(), (menu_top + menu_sel - menu_show_start + 1)*CHAR_HEIGHT+1);

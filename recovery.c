@@ -639,7 +639,7 @@ update_directory(const char* path, const char* unmount_when_done) {
 static void
 wipe_data(int confirm) {
     if (confirm && !confirm_selection( "Confirm wipe of all user data?", "Yes - Wipe all user data"))
-	return;
+        return;
 
     ui_print("\n-- Wiping data...\n");
     device_wipe_data();
@@ -766,9 +766,9 @@ setup_adbd() {
 
 // call a clean reboot
 void reboot_main_system(int cmd, int flags, char *arg) {
-	verify_root_and_recovery();
-	finish_recovery(NULL); // sync() in here
-	android_reboot(cmd, flags, arg);
+    verify_root_and_recovery();
+    finish_recovery(NULL); // sync() in here
+    android_reboot(cmd, flags, arg);
 }
 
 int
@@ -864,11 +864,11 @@ main(int argc, char **argv) {
         wipe_data = wipe_cache = 1;
 #endif
         break;
-	case 'h':
-		ui_set_background(BACKGROUND_ICON_CID);
-		ui_show_text(0);
-		headless = 1;
-		break;
+        case 'h':
+            ui_set_background(BACKGROUND_ICON_CID);
+            ui_show_text(0);
+            headless = 1;
+            break;
         case 'c': wipe_cache = 1; break;
         case 't': ui_show_text(1); break;
         case 'l': sideload = 1; break;
@@ -933,7 +933,7 @@ main(int argc, char **argv) {
         if (status != INSTALL_SUCCESS) ui_print("Cache wipe failed.\n");
     } else if (sideload) {
         signature_check_enabled = 0;
-        if (!headless) 
+        if (!headless)
           ui_set_show_text(1);
         if (0 == apply_from_adb()) {
             status = INSTALL_SUCCESS;

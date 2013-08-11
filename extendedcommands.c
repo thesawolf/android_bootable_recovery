@@ -1263,12 +1263,13 @@ static void partition_sdcard(const char* volume) {
                                   NULL };
 
     static char* partition_types[] = { "ext3",
-				       "ext4",
-				       NULL
+                                       "ext4",
+                                       NULL
     };
+
     static char* ext_headers[] = { "Ext Size", "", NULL };
     static char* swap_headers[] = { "Swap Size", "", NULL };
-    static char* fstype_headers[] = { "Partition Type", "", NULL };
+    static char* fstype_headers[] = {"Partition Type", "", NULL };
 
     int ext_size = get_menu_selection(ext_headers, ext_sizes, 0, 0);
     if (ext_size == GO_BACK)
@@ -1280,7 +1281,7 @@ static void partition_sdcard(const char* volume) {
 
     int partition_type = get_menu_selection(fstype_headers, partition_types, 0, 0);
     if (partition_type == GO_BACK)
-	return;
+        return;
 
     char sddevice[256];
     Volume *vol = volume_for_path(volume);
@@ -1288,9 +1289,8 @@ static void partition_sdcard(const char* volume) {
     // we only want the mmcblk, not the partition
     sddevice[strlen("/dev/block/mmcblkX")] = NULL;
     char cmd[PATH_MAX];
-
     setenv("SDPATH", sddevice, 1);
-    sprintf(cmd, "sdparted -es %s -ss %s -efs %s -s", ext_sizes[ext_size], swap_sizes[swap_size], partition_type[partition_type]);
+    sprintf(cmd, "sdparted -es %s -ss %s -efs %s -s", ext_sizes[ext_size], swap_sizes[swap_size], partition_types[partition_type]);
     ui_print("Partitioning SD Card... please wait...\n");
     if (0 == __system(cmd))
         ui_print("Done!\n");
@@ -1328,8 +1328,8 @@ void show_advanced_menu()
     };
 
     static char* list[] = { "reboot recovery",
-			    "reboot to bootloader",
-  			    "power off",
+                            "reboot to bootloader",
+                            "power off",
                             "wipe dalvik cache",
                             "report error",
                             "key test",
@@ -1343,7 +1343,7 @@ void show_advanced_menu()
     char bootloader_mode[PROPERTY_VALUE_MAX];
     property_get("ro.bootloader.mode", bootloader_mode, "");
     if (!strcmp(bootloader_mode, "download")) {
-	list[1] = "reboot to download mode";
+        list[1] = "reboot to download mode";
     }
 
     if (!can_partition("/sdcard")) {
@@ -1364,28 +1364,29 @@ void show_advanced_menu()
         switch (chosen_item)
         {
             case 0:
-  	    {
-		ui_print("Rebooting recovery...\n");
-		reboot_main_system(ANDROID_RB_RESTART2, 0, "recovery");
+            {
+                ui_print("Rebooting recovery...\n");
+                reboot_main_system(ANDROID_RB_RESTART2, 0, "recovery");
                 break;
-	    }
+            }
             case 1:
-	    {
-		if (!strcmp(bootloader_mode, "download")) {
-			ui_print("Rebooting to download mode...\n");
-			reboot_main_system(ANDROID_RB_RESTART2, 0, "download");
-		} else {
-			ui_print("Rebooting to bootloader...\n");
-			reboot_main_system(ANDROID_RB_RESTART2, 0, "bootloader");
-		}
-		break;
-	    case 2:
-	    {
-		ui_print("Shutting down...\n");
-		reboot_main_system(ANDROID_RB_POWEROFF, 0, 0);
-		break;
-	    }
-	    case 3: 
+            {
+                if (!strcmp(bootloader_mode, "download")) {
+                    ui_print("Rebooting to download mode...\n");
+                    reboot_main_system(ANDROID_RB_RESTART2, 0, "download");
+                } else {
+                    ui_print("Rebooting to bootloader...\n");
+                    reboot_main_system(ANDROID_RB_RESTART2, 0, "bootloader");
+                }
+                break;
+            }
+            case 2:
+            {
+                ui_print("Shutting down...\n");
+                reboot_main_system(ANDROID_RB_POWEROFF, 0, 0);
+                break;
+            }
+            case 3:
                 if (0 != ensure_path_mounted("/data"))
                     break;
                 ensure_path_mounted("/sd-ext");
@@ -1600,18 +1601,19 @@ int verify_root_and_recovery() {
     // check to see if install-recovery.sh is going to clobber recovery
     // install-recovery.sh is also used to run the su daemon on stock rom for 4.3+
     // so verify that doesn't exist...
-    if (0 == lstat("/system/etc/install-recovery.sh", &st)) {
-	// check install-recovery.sh exists and is executable
-	if (0 == lstat("/system/etc/install-recovery.sh", &st)) {
+    if (0 != lstat("/system/etc/.installed_su_daemon", &st)) {
+        // check install-recovery.sh exists and is executable
+        if (0 == lstat("/system/etc/install-recovery.sh", &st)) {
             if (st.st_mode & (S_IXUSR | S_IXGRP | S_IXOTH)) {
-           	ui_show_text(1);
-            	ret = 1;
-            	if (confirm_selection("ROM may flash stock recovery on boot. Fix?", "Yes - Disable recovery flash")) {
-               	    __system("chmod -x /system/etc/install-recovery.sh");
+                ui_show_text(1);
+                ret = 1;
+                if (confirm_selection("ROM may flash stock recovery on boot. Fix?", "Yes - Disable recovery flash")) {
+                    __system("chmod -x /system/etc/install-recovery.sh");
                 }
-	    }
-   	} 
+            }
+        }
     }
+
 
     int exists = 0;
     if (0 == lstat("/system/bin/su", &st)) {
